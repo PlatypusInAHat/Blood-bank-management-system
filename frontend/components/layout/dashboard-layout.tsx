@@ -14,15 +14,23 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background">
-        <div className="container flex h-16 items-center justify-between py-4">
+        <div className="flex h-16 items-center justify-between px-4 lg:px-8">
           <MainNav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
           <MobileNav />
           <UserNav />
         </div>
       </header>
-      <div className="container flex-1 items-start md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-        <Sidebar isSidebarOpen={isSidebarOpen} className="hidden md:block" />
-        <main className="flex w-full flex-col overflow-hidden p-6">{children}</main>
+      <div className="flex flex-1">
+        {isSidebarOpen && (
+          <aside className="hidden md:flex w-[220px] lg:w-[260px] flex-col border-r bg-muted/30">
+            <Sidebar isSidebarOpen={isSidebarOpen} className="flex-1" />
+          </aside>
+        )}
+        <main className="flex-1 overflow-auto">
+          <div className="p-4 md:p-6 lg:p-8 max-w-7xl">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   )
