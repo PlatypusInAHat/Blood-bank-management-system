@@ -1,6 +1,9 @@
+import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { ArrowRight } from "lucide-react"
 
 export default function RecentDonations() {
   const recentDonations = [
@@ -43,9 +46,17 @@ export default function RecentDonations() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Hiến máu gần đây</CardTitle>
-        <CardDescription>Có 5 lượt hiến máu trong 3 ngày qua.</CardDescription>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <CardTitle>Hiến máu gần đây</CardTitle>
+          <CardDescription>Có 5 lượt hiến máu trong 3 ngày qua.</CardDescription>
+        </div>
+        <Link href="/donors">
+          <Button variant="ghost" size="sm" className="gap-1">
+            Xem tất cả
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </Link>
       </CardHeader>
       <CardContent>
         <Table>

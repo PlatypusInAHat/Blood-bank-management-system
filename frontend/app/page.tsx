@@ -1,19 +1,23 @@
+"use client"
+
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('auth_token');  // Kiểm tra xem người dùng đã đăng nhập hay chưa
+    const token = localStorage.getItem('auth_token');
     if (token) {
-      // Nếu có token, chuyển hướng đến dashboard hoặc trang chủ
       router.push('/dashboard');
     } else {
-      // Nếu không có token, chuyển hướng về trang đăng nhập
       router.push('/login');
     }
   }, [router]);
 
-  return null;  // Không render gì trên trang này
+  return (
+    <div className="flex h-screen w-full items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+    </div>
+  );
 }

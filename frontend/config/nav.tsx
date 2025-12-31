@@ -1,4 +1,4 @@
-import { BarChart3, Droplet, LayoutDashboard, Users, ClipboardList, Settings, Layers } from "lucide-react"
+import { BarChart3, Droplet, LayoutDashboard, Users, ClipboardList, Settings, Layers, CheckCircle } from "lucide-react"
 
 export const navItems = [
   {
@@ -25,6 +25,11 @@ export const navItems = [
     title: "Yêu cầu máu",
     href: "/requests",
     icon: ClipboardList,
+  },
+  {
+    title: "Phê duyệt máu",
+    href: "/approvals",
+    icon: CheckCircle,
   },
   {
     title: "Báo cáo & Thống kê",

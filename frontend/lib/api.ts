@@ -91,6 +91,10 @@ export const API = {
       apiClient.put(`/requests/${id}`, data),
     delete: (id: string) =>
       apiClient.delete(`/requests/${id}`),
+    approve: (requestId: number | string) =>
+      apiClient.put(`/requests/${requestId}/approve`),
+    reject: (requestId: number | string, reason: string) =>
+      apiClient.put(`/requests/${requestId}/reject`, { reason }),
   },
 
   // Blood Tests

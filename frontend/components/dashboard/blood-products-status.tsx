@@ -1,5 +1,8 @@
+import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button"
+import { ArrowRight } from "lucide-react"
 
 export default function BloodProductsStatus() {
   const bloodProducts = [
@@ -11,9 +14,17 @@ export default function BloodProductsStatus() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Tình trạng chế phẩm máu</CardTitle>
-        <CardDescription>Tổng số đơn vị chế phẩm máu hiện có: 280 đơn vị</CardDescription>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <CardTitle>Tình trạng chế phẩm máu</CardTitle>
+          <CardDescription>Tổng số đơn vị chế phẩm máu hiện có: 280 đơn vị</CardDescription>
+        </div>
+        <Link href="/blood-products">
+          <Button variant="ghost" size="sm" className="gap-1">
+            Xem chi tiết
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </Link>
       </CardHeader>
       <CardContent>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
