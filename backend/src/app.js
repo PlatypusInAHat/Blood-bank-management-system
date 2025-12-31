@@ -1,0 +1,92 @@
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const rateLimit = require("express-rate-limit");
+require("dotenv").config();
+
+const { limiter, securityHeaders, ipBlocker, apiKeyAuth } = require("./middleware/securityMiddleware");
+const errorHandler = require("./middleware/errorHandler");
+
+// Import routes
+const authRoutes = require("./routes/authRoutes");
+const donorRoutes = require("./routes/donorRoutes");
+const bloodInventoryRoutes = require("./routes/bloodInventoryRoutes");
+const bloodRequestRoutes = require("./routes/bloodRequestRoutes");
+const userRoutes = require("./routes/userRoutes");
+const reportRoutes = require("./routes/reportRoutes");
+const bloodTestRoutes = require("./routes/BloodTestRoutes"); // 🩸 Thêm route xét nghiệm máu
+
+const app = express();
+
+// 🏥 Health check endpoint for Docker
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+
+// 🛡️ Middleware bảo mật
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Configure CORS to allow frontend
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
+
+app.use(helmet());
+app.use(morgan("dev"));
+app.use(securityHeaders);
+app.use(limiter);
+app.use(ipBlocker);
+
+// 📜 Cấu hình Swagger API Documentation
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Blood Bank Management API",
+      version: "1.0.0",
+      description: "API Documentation for Blood Bank Management System"
+    }
+  },
+  apis: ["./routes/*.js"]
+};
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// 📌 Tích hợp tất cả API vào hệ thống
+// Auth routes don't require API key
+app.use("/api/auth", authRoutes);
+
+// Apply API key auth to other routes
+app.use(apiKeyAuth);
+
+app.use("/api/donors", donorRoutes);
+app.use("/api/blood", bloodInventoryRoutes);
+app.use("/api/requests", bloodRequestRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/reports", reportRoutes);
+app.use("/api/tests", bloodTestRoutes); // 🩸 Tích hợp API xét nghiệm máu
+
+// 🛠️ Middleware xử lý lỗi
+app.use(errorHandler);
+
+// 🛠️ Xử lý route không tồn tại
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: "API endpoint không tồn tại!" });
+});
+
+module.exports = app;

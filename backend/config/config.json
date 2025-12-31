@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "11102004",
+    "database": "blood_bank",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "your-username",
+    "password": "your-password",
+    "database": "blood_bank_db_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "11102004",
+    "database": "blood_bank",
+    "host": "postgres",
+    "dialect": "postgres"
+  }
+}
